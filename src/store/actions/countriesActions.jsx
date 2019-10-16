@@ -1,5 +1,9 @@
 import baseUrl from "../../api/apiBaseUrl";
-import { FETCH_COUNTRIES, SERVER_REQUEST } from "./actionTypes";
+import {
+  FETCH_COUNTRIES,
+  SERVER_REQUEST,
+  GUESSED_BY_USER
+} from "./actionTypes";
 
 export const getServersRequest = () => ({
   type: SERVER_REQUEST
@@ -8,6 +12,10 @@ export const getServersRequest = () => ({
 export const fetchCountries = data => ({
   type: FETCH_COUNTRIES,
   data
+});
+export const guessedByUser = guess => ({
+  type: GUESSED_BY_USER,
+  guess
 });
 
 export const getCountriesList = () => (dispatch, getState) => {
