@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { getCountriesList } from "../store/actions";
+import { getCountriesList, guessedByUser } from "../store/actions";
 import { connect } from "react-redux";
-import "./button.css";
+import "./button.scss";
 
 export class Button extends Component {
   constructor(props) {
@@ -11,7 +11,7 @@ export class Button extends Component {
       indexNumber: 0,
       userGuess: "",
       checkInput: "",
-      score: 0
+      gameStart: true
     };
 
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -36,12 +36,12 @@ export class Button extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    console.log(this.state.userGuess);
     const min = 0;
     const max = 249;
     if (
       this.props.countries[this.state.indexNumber].name === this.state.userGuess
     ) {
+      this.props.guessedByUser(this.state.userGuess);
       this.setState({
         indexNumber: this.getRandomInt(min, max),
         userGuess: "",
@@ -55,12 +55,19 @@ export class Button extends Component {
     if (this.props.countries.length) {
       return (
         <div>
+          <div className="score-board">
+            <div className="user-flex">User Panel</div>
+            <div>{data[this.state.indexNumber].name}</div>
+            <div>Guessed By User: </div>
+            {this.props.guessed.map(guess => (
+              <div key={guess}>{guess}</div>
+            ))}
+          </div>
           <img
             src={data[this.state.indexNumber].flag}
             alt={data[this.state.indexNumber].name}
             className="image"
           />
-          <p>{data[this.state.indexNumber].name}</p>
           <form className="user-input" onSubmit={this.handleSubmit}>
             <label>
               Zgadnij jaki to kraj!:
@@ -69,7 +76,6 @@ export class Button extends Component {
                 value={this.state.userGuess}
                 onChange={this.handleClick}
               />
-              {/* <button type="submit">Submit</button> */}
             </label>
           </form>
         </div>
@@ -84,11 +90,12 @@ export class Button extends Component {
 
 const mapStateToProps = state => {
   return {
-    countries: state.countries.data
+    countries: state.countries.data,
+    guessed: state.countries.guessed
   };
 };
 
 export default connect(
   mapStateToProps,
-  { getCountriesList }
+  { getCountriesList, guessedByUser }
 )(Button);
