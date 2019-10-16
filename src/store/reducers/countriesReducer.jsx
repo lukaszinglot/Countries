@@ -1,8 +1,13 @@
-import { FETCH_COUNTRIES, SERVER_REQUEST } from "../actions/actionTypes";
+import {
+  FETCH_COUNTRIES,
+  SERVER_REQUEST,
+  GUESSED_BY_USER
+} from "../actions/actionTypes";
 
 const initialState = {
   data: {},
-  isFetching: false
+  isFetching: false,
+  guessed: []
 };
 
 export const countriesReducer = (state = initialState, action) => {
@@ -17,6 +22,11 @@ export const countriesReducer = (state = initialState, action) => {
         ...state,
         isFetching: false,
         data: action.data
+      };
+    case GUESSED_BY_USER:
+      return {
+        ...state,
+        guessed: [...state.guessed, action.guess]
       };
     default:
       return state;
